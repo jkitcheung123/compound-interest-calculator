@@ -9,45 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <style>
-  /* ================================================================
-     DESIGN TOKENS — ZA Bank Inspired System
-     ================================================================ */
   :root {
-    /* Brand */
     --brand:               #A4D037;
     --brand-deep:          #6D9918;
     --brand-light:         #D2E89E;
     --brand-wash:          #F4F9E8;
     --brand-glow:          rgba(164, 208, 55, 0.25);
-
-    /* Surfaces */
     --surface-0:           #FFFFFF;
     --surface-1:           #F9FAFB;
     --surface-2:           #F2F4F6;
     --surface-brand:       #F7FAF2;
-
-    /* Text */
     --text-primary:        #0F172A;
     --text-secondary:      #475569;
     --text-tertiary:       #94A3B8;
     --text-inverse:        #FFFFFF;
-
-    /* Borders */
     --border:              #E2E8F0;
     --border-strong:       #CBD5E1;
-
-    /* Semantic */
     --success:             #10B981;
     --warning:             #F59E0B;
-
-    /* Sizing */
     --radius-sm:           8px;
     --radius:              12px;
     --radius-lg:           16px;
     --radius-xl:           24px;
     --radius-full:         9999px;
-
-    /* Spacing (4pt system) */
     --s-1:                 4px;
     --s-2:                 8px;
     --s-3:                 12px;
@@ -59,1058 +43,463 @@
     --s-12:                48px;
     --s-16:                64px;
     --s-20:                80px;
-    --s-24:                96px;
-
-    /* Shadows */
     --shadow-xs:           0 1px 2px rgba(0,0,0,0.04);
     --shadow-sm:           0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     --shadow-md:           0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -2px rgba(0,0,0,0.05);
     --shadow-lg:           0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.04);
     --shadow-xl:           0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
-
-    /* Easing */
     --ease-out-expo:       cubic-bezier(0.16, 1, 0.3, 1);
     --ease-out-quart:      cubic-bezier(0.25, 1, 0.5, 1);
-    --ease-in-out:         cubic-bezier(0.65, 0, 0.35, 1);
   }
 
-  /* ================================================================
-     RESET & BASE
-     ================================================================ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
-
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
   body {
     font-family: "Outfit", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
-    background: var(--surface-1);
-    color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    overflow-x: hidden;
+    background: var(--surface-1); color: var(--text-primary); line-height: 1.6; min-height: 100vh; overflow-x: hidden;
   }
 
-  /* ================================================================
-     BACKGROUND PATTERN
-     ================================================================ */
-  .bg-pattern {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
+  .bg-pattern { position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.4; }
+  .bg-pattern::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, #CBD5E1 1px, transparent 1px); background-size: 32px 32px; mask-image: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 70%); }
+  .bg-gradient { position: fixed; top: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(164,208,55,0.08) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .bg-gradient-2 { position: fixed; bottom: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(164,208,55,0.05) 0%, transparent 70%); pointer-events: none; z-index: 0; }
 
-  .bg-pattern::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle, #CBD5E1 1px, transparent 1px);
-    background-size: 32px 32px;
-    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 70%);
-  }
+  .app-container { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: var(--s-8) var(--s-5) var(--s-16); }
 
-  .bg-gradient {
-    position: fixed;
-    top: -200px;
-    right: -200px;
-    width: 700px;
-    height: 700px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(164,208,55,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  /* Hero */
+  .hero { text-align: center; padding: var(--s-12) var(--s-5) var(--s-8); position: relative; }
+  .hero-badge { display: inline-flex; align-items: center; gap: var(--s-2); background: var(--brand-wash); color: var(--brand-deep); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: var(--s-1) var(--s-4); border-radius: var(--radius-full); margin-bottom: var(--s-6); }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand); animation: pulse-dot 2s ease-in-out infinite; }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+  .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.025em; color: var(--text-primary); margin-bottom: var(--s-5); }
+  .hero-title .accent { color: var(--brand); position: relative; display: inline-block; }
+  .hero-title .accent::after { content: ''; position: absolute; bottom: 4px; left: 0; right: 0; height: 6px; background: var(--brand); opacity: 0.2; border-radius: 4px; }
+  .hero-subtitle { font-size: 1.125rem; font-weight: 400; color: var(--text-secondary); max-width: 480px; margin: 0 auto; line-height: 1.7; }
 
-  .bg-gradient-2 {
-    position: fixed;
-    bottom: -150px;
-    left: -150px;
-    width: 500px;
-    height: 500px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(164,208,55,0.05) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  /* === MODE TABS === */
+  .mode-tabs { display: flex; justify-content: center; margin-bottom: var(--s-10); }
+  .mode-tab-wrap { display: inline-flex; background: var(--surface-2); border-radius: var(--radius); padding: 4px; }
+  .mode-tab { display: flex; align-items: center; gap: var(--s-2); padding: var(--s-3) var(--s-6); border-radius: calc(var(--radius) - 4px); font-size: 0.9375rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-tertiary); transition: all 0.2s var(--ease-out-quart); font-family: inherit; white-space: nowrap; }
+  .mode-tab:hover { color: var(--text-primary); }
+  .mode-tab.active { background: var(--surface-0); color: var(--text-primary); box-shadow: var(--shadow-xs); }
+  .mode-tab:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+  .mode-tab svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-  /* ================================================================
-     LAYOUT
-     ================================================================ */
-  .app-container {
-    position: relative;
-    z-index: 1;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: var(--s-8) var(--s-5) var(--s-16);
-  }
-
-  /* ================================================================
-     HEADER — Hero Section
-     ================================================================ */
-  .hero {
-    text-align: center;
-    padding: var(--s-20) var(--s-5) var(--s-16);
-    position: relative;
-  }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--s-2);
-    background: var(--brand-wash);
-    color: var(--brand-deep);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: var(--s-1) var(--s-4);
-    border-radius: var(--radius-full);
-    margin-bottom: var(--s-6);
-  }
-
-  .hero-badge .dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--brand);
-    animation: pulse-dot 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.5); }
-  }
-
-  .hero-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.025em;
-    color: var(--text-primary);
-    margin-bottom: var(--s-5);
-  }
-
-  .hero-title .accent {
-    color: var(--brand);
-    position: relative;
-    display: inline-block;
-  }
-
-  .hero-title .accent::after {
-    content: '';
-    position: absolute;
-    bottom: 4px;
-    left: 0;
-    right: 0;
-    height: 6px;
-    background: var(--brand);
-    opacity: 0.2;
-    border-radius: 4px;
-  }
-
-  .hero-subtitle {
-    font-size: 1.125rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    max-width: 480px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  /* ================================================================
-     STATS DASHBOARD
-     ================================================================ */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--s-4);
-    margin-bottom: var(--s-10);
-  }
-
-  .stat-card {
-    background: var(--surface-0);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--s-5) var(--s-5) var(--s-4);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart), border-color 0.2s var(--ease-out-quart);
-    cursor: default;
-    display: flex;
-    flex-direction: column;
-    gap: var(--s-3);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--border);
-    transition: background 0.3s var(--ease-out-quart);
-  }
-
-  .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-strong);
-  }
-
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-4); margin-bottom: var(--s-10); }
+  .stat-card { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--s-5) var(--s-5) var(--s-4); box-shadow: var(--shadow-sm); transition: transform 0.2s var(--ease-out-quart), box-shadow 0.2s var(--ease-out-quart), border-color 0.2s var(--ease-out-quart); cursor: default; display: flex; flex-direction: column; gap: var(--s-3); position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--border); transition: background 0.3s var(--ease-out-quart); }
+  .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
   .stat-card:nth-child(1):hover::before { background: var(--brand); }
   .stat-card:nth-child(2):hover::before { background: var(--success); }
   .stat-card:nth-child(3):hover::before { background: var(--brand-deep); }
   .stat-card:nth-child(4):hover::before { background: var(--text-secondary); }
-
-  .stat-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
-    color: var(--text-primary);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
-  }
-
+  .stat-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); }
+  .stat-value { font-size: 1.5rem; font-weight: 700; font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; color: var(--text-primary); line-height: 1.15; letter-spacing: -0.01em; }
   .stat-card:nth-child(1) .stat-value { color: var(--brand-deep); }
   .stat-card:nth-child(2) .stat-value { color: var(--success); }
+  .stat-change { font-size: 0.75rem; font-weight: 500; color: var(--text-tertiary); }
 
-  .stat-change {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--text-tertiary);
-  }
+  /* Layout */
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-6); margin-bottom: var(--s-8); }
 
-  /* ================================================================
-     MAIN CONTENT WRAPPER
-     ================================================================ */
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-6);
-    margin-bottom: var(--s-8);
-  }
+  /* Cards */
+  .card { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--s-8); box-shadow: var(--shadow-sm); }
+  .card-accent { border-left: 4px solid var(--brand); padding-left: calc(var(--s-8) - 4px); }
+  .card-highlight { background: var(--surface-brand); border: 2px solid var(--brand); box-shadow: var(--shadow-lg), 0 0 0 8px rgba(164,208,55,0.06); }
+  .card-stats { background: var(--surface-0); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: var(--s-6) var(--s-8); box-shadow: var(--shadow-sm); }
 
-  /* ================================================================
-     CARDS — Multiple variants
-     ================================================================ */
-  .card {
-    background: var(--surface-0);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: var(--s-8);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .card-accent {
-    border-left: 4px solid var(--brand);
-    padding-left: calc(var(--s-8) - 4px);
-  }
-
-  .card-highlight {
-    background: var(--surface-brand);
-    border: 2px solid var(--brand);
-    box-shadow: var(--shadow-lg), 0 0 0 8px rgba(164,208,55,0.06);
-  }
-
-  .card-stats {
-    background: var(--surface-0);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-xl);
-    padding: var(--s-6) var(--s-8);
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* ================================================================
-     SECTION HEADERS
-     ================================================================ */
-  .section-header {
-    display: flex;
-    align-items: center;
-    gap: var(--s-3);
-    margin-bottom: var(--s-6);
-  }
-
-  .section-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-
+  /* Section headers */
+  .section-header { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-6); }
+  .section-icon { width: 36px; height: 36px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; }
   .section-icon.input  { background: var(--brand-wash); color: var(--brand-deep); }
   .section-icon.result { background: var(--brand); color: var(--text-inverse); }
   .section-icon.chart  { background: var(--surface-2); color: var(--text-secondary); }
   .section-icon.table  { background: var(--surface-2); color: var(--text-secondary); }
+  .section-title { font-size: 1.125rem; font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+  .section-subtitle { font-size: 0.8125rem; color: var(--text-tertiary); font-weight: 400; }
 
-  .section-title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
-  }
+  /* Inputs */
+  .input-group { margin-bottom: var(--s-5); }
+  .input-group label { display: flex; align-items: center; gap: var(--s-2); font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: var(--s-2); }
+  .input-group .label-hint { font-size: 0.75rem; font-weight: 400; color: var(--text-tertiary); letter-spacing: 0; text-transform: none; }
+  .input-wrapper { position: relative; }
+  .input-wrapper input { width: 100%; height: 56px; padding: 0 64px 0 var(--s-4); background: var(--surface-1); border: 2px solid var(--border); border-radius: var(--radius); color: var(--text-primary); font-size: 1.25rem; font-weight: 600; font-family: inherit; font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; outline: none; transition: all 0.2s var(--ease-out-quart); }
+  .input-wrapper input:hover { border-color: var(--border-strong); }
+  .input-wrapper input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px var(--brand-glow); background: var(--surface-0); }
+  .input-wrapper .unit { position: absolute; right: var(--s-4); top: 50%; transform: translateY(-50%); font-size: 0.875rem; font-weight: 600; color: var(--text-tertiary); pointer-events: none; background: var(--surface-1); padding: 2px var(--s-2); border-radius: var(--radius-sm); }
 
-  .section-subtitle {
-    font-size: 0.8125rem;
-    color: var(--text-tertiary);
-    font-weight: 400;
-  }
+  /* Frequency */
+  .freq-group { margin-bottom: var(--s-5); }
+  .freq-label { font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: var(--s-3); }
+  .freq-options { display: flex; background: var(--surface-1); border-radius: var(--radius); padding: 4px; gap: 2px; }
+  .freq-opt { flex: 1; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: calc(var(--radius) - 4px); font-size: 0.875rem; font-weight: 600; cursor: pointer; border: none; background: transparent; color: var(--text-tertiary); transition: all 0.15s var(--ease-out-quart); font-family: inherit; }
+  .freq-opt:hover { color: var(--text-primary); background: var(--surface-0); }
+  .freq-opt.active { background: var(--surface-0); color: var(--text-primary); box-shadow: var(--shadow-xs); }
+  .freq-opt:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
 
-  /* ================================================================
-     INPUT GROUPS
-     ================================================================ */
-  .input-group {
-    margin-bottom: var(--s-5);
-  }
+  /* Presets */
+  .presets-label { font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: var(--s-3); }
+  .presets-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); margin-bottom: var(--s-5); }
+  .preset-chip { display: flex; flex-direction: column; gap: 2px; padding: var(--s-4); border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--surface-0); cursor: pointer; transition: all 0.15s var(--ease-out-quart); font-family: inherit; text-align: left; }
+  .preset-chip:hover { border-color: var(--brand); background: var(--brand-wash); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .preset-chip:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .preset-chip .pc-scenario { font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .preset-chip .pc-estimate { font-size: 0.75rem; font-weight: 500; color: var(--brand-deep); }
 
-  .input-group label {
-    display: flex;
-    align-items: center;
-    gap: var(--s-2);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-secondary);
-    margin-bottom: var(--s-2);
-  }
+  /* Presets for target mode */
+  .target-preset-chip { display: flex; flex-direction: column; gap: 2px; padding: var(--s-4); border-radius: var(--radius); border: 1.5px solid var(--border); background: var(--surface-0); cursor: pointer; transition: all 0.15s var(--ease-out-quart); font-family: inherit; text-align: left; }
+  .target-preset-chip:hover { border-color: var(--brand); background: var(--brand-wash); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+  .target-preset-chip:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+  .target-preset-chip .pc-scenario { font-size: 0.8125rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
+  .target-preset-chip .pc-estimate { font-size: 0.75rem; font-weight: 500; color: var(--brand-deep); }
+  .hidden { display: none !important; }
 
-  .input-group .label-hint {
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: var(--text-tertiary);
-    letter-spacing: 0;
-    text-transform: none;
-  }
+  /* Results */
+  .result-hero { text-align: center; padding: var(--s-8) var(--s-6); }
+  .result-total { font-size: clamp(2.75rem, 6vw, 4.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; color: var(--brand-deep); font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; margin-bottom: var(--s-3); }
+  .result-label { font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: var(--s-2); }
+  .result-metrics { display: flex; justify-content: center; gap: var(--s-8); margin-top: var(--s-6); }
+  .result-metric { text-align: center; }
+  .result-metric .rm-value { font-size: 1.5rem; font-weight: 700; font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .result-metric .rm-label { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); margin-top: var(--s-1); }
+  .gain-badge { display: inline-flex; align-items: center; gap: var(--s-2); background: var(--brand); color: var(--text-inverse); padding: var(--s-2) var(--s-5); border-radius: var(--radius-full); font-size: 0.9375rem; font-weight: 700; margin-top: var(--s-4); }
+  .gain-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
 
-  .input-wrapper {
-    position: relative;
-  }
+  /* Target result special */
+  .target-timeline { display: flex; justify-content: center; align-items: stretch; gap: var(--s-3); margin-top: var(--s-6); }
+  .target-timeline-block { background: var(--surface-0); border: 1.5px solid var(--border); border-radius: var(--radius-lg); padding: var(--s-4) var(--s-5); text-align: center; min-width: 80px; }
+  .target-timeline-block .tl-value { font-size: 2rem; font-weight: 800; font-feature-settings: "tnum"; color: var(--brand-deep); line-height: 1.1; }
+  .target-timeline-block .tl-unit { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); margin-top: var(--s-1); }
+  .target-timeline-sep { display: flex; align-items: center; font-size: 1.5rem; color: var(--text-tertiary); font-weight: 300; }
 
-  .input-wrapper input {
-    width: 100%;
-    height: 56px;
-    padding: 0 64px 0 var(--s-4);
-    background: var(--surface-1);
-    border: 2px solid var(--border);
-    border-radius: var(--radius);
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    font-weight: 600;
-    font-family: inherit;
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
-    outline: none;
-    transition: all 0.2s var(--ease-out-quart);
-  }
+  .target-date-badge { display: inline-flex; align-items: center; gap: var(--s-2); background: var(--surface-2); color: var(--text-secondary); padding: var(--s-2) var(--s-5); border-radius: var(--radius-full); font-size: 0.8125rem; font-weight: 600; margin-top: var(--s-4); }
+  .target-date-badge svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-  .input-wrapper input:hover {
-    border-color: var(--border-strong);
-  }
+  /* Chart */
+  .chart-container { position: relative; height: 360px; margin-top: var(--s-4); }
+  .chart-insight { font-size: 0.8125rem; color: var(--text-secondary); text-align: center; margin-top: var(--s-4); line-height: 1.6; }
+  .chart-insight strong { color: var(--brand-deep); font-weight: 700; }
 
-  .input-wrapper input:focus {
-    border-color: var(--brand);
-    box-shadow: 0 0 0 4px var(--brand-glow);
-    background: var(--surface-0);
-  }
+  /* Table */
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: var(--s-2) calc(var(--s-8) * -1) calc(var(--s-4) * -1); padding: 0 var(--s-8) var(--s-4); }
+  table { width: 100%; border-collapse: collapse; min-width: 460px; font-feature-settings: "tnum"; font-variant-numeric: tabular-nums; }
+  thead th { text-align: right; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); padding: var(--s-3) var(--s-4); border-bottom: 2px solid var(--border); white-space: nowrap; }
+  thead th:first-child { text-align: left; padding-left: 0; }
+  tbody td { text-align: right; padding: var(--s-3) var(--s-4); border-bottom: 1px solid var(--surface-2); font-size: 0.875rem; font-weight: 400; color: var(--text-secondary); white-space: nowrap; transition: background 0.15s var(--ease-out-quart); }
+  tbody td:first-child { text-align: left; font-weight: 600; color: var(--text-primary); padding-left: 0; }
+  tbody tr:hover td { background: var(--surface-1); }
+  tbody tr:last-child td { border-bottom: none; font-weight: 700; color: var(--brand-deep); font-size: 0.9375rem; padding-top: var(--s-4); padding-bottom: 0; }
+  tbody tr:last-child td:first-child { color: var(--brand-deep); }
+  td.gain { color: var(--success); font-weight: 600; }
+  tr.target-row td { background: var(--brand-wash); border-bottom: 1.5px solid var(--brand) !important; }
 
-  .input-wrapper .unit {
-    position: absolute;
-    right: var(--s-4);
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--text-tertiary);
-    pointer-events: none;
-    background: var(--surface-1);
-    padding: 2px var(--s-2);
-    border-radius: var(--radius-sm);
-  }
+  /* Comparison bar */
+  .comparison-bar { display: flex; align-items: center; gap: var(--s-3); padding: var(--s-4) var(--s-5); background: var(--surface-2); border-radius: var(--radius); margin-top: var(--s-4); }
+  .comparison-bar .cb-icon { width: 28px; height: 28px; border-radius: 50%; background: var(--brand); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: white; font-size: 0.75rem; font-weight: 700; }
+  .comparison-bar .cb-text { font-size: 0.8125rem; color: var(--text-secondary); line-height: 1.5; }
+  .comparison-bar .cb-text strong { color: var(--text-primary); font-weight: 700; }
 
-  /* ================================================================
-     FREQUENCY SELECTOR — Segmented control
-     ================================================================ */
-  .freq-group {
-    margin-bottom: var(--s-5);
-  }
+  /* Footer */
+  .footer-note { text-align: center; padding-top: var(--s-10); }
+  .footer-note p { font-size: 0.75rem; color: var(--text-tertiary); line-height: 1.6; }
 
-  .freq-label {
-    font-size: 0.8125rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-secondary);
-    margin-bottom: var(--s-3);
-  }
+  /* Animations */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-in { animation: fadeInUp 0.5s var(--ease-out-expo) both; }
+  .stagger-1 { animation-delay: 0.05s; } .stagger-2 { animation-delay: 0.1s; } .stagger-3 { animation-delay: 0.15s; } .stagger-4 { animation-delay: 0.2s; } .stagger-5 { animation-delay: 0.25s; }
 
-  .freq-options {
-    display: flex;
-    background: var(--surface-1);
-    border-radius: var(--radius);
-    padding: 4px;
-    gap: 2px;
-  }
-
-  .freq-opt {
-    flex: 1;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: calc(var(--radius) - 4px);
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--text-tertiary);
-    transition: all 0.15s var(--ease-out-quart);
-    font-family: inherit;
-  }
-
-  .freq-opt:hover {
-    color: var(--text-primary);
-    background: var(--surface-0);
-  }
-
-  .freq-opt.active {
-    background: var(--surface-0);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-xs);
-  }
-
-  .freq-opt:focus-visible {
-    outline: 2px solid var(--brand);
-    outline-offset: -2px;
-  }
-
-  /* ================================================================
-     PRESETS — Chip style cards
-     ================================================================ */
-  .presets-label {
-    font-size: 0.8125rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-secondary);
-    margin-bottom: var(--s-3);
-  }
-
-  .presets-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s-2);
-    margin-bottom: var(--s-5);
-  }
-
-  .preset-chip {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: var(--s-4);
-    border-radius: var(--radius);
-    border: 1.5px solid var(--border);
-    background: var(--surface-0);
-    cursor: pointer;
-    transition: all 0.15s var(--ease-out-quart);
-    font-family: inherit;
-    text-align: left;
-  }
-
-  .preset-chip:hover {
-    border-color: var(--brand);
-    background: var(--brand-wash);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
-  }
-
-  .preset-chip:focus-visible {
-    outline: 2px solid var(--brand);
-    outline-offset: 2px;
-  }
-
-  .preset-chip .pc-scenario {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    line-height: 1.3;
-  }
-
-  .preset-chip .pc-estimate {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--brand-deep);
-  }
-
-  /* ================================================================
-     RESULTS HIGHLIGHT CARD
-     ================================================================ */
-  .result-hero {
-    text-align: center;
-    padding: var(--s-8) var(--s-6);
-  }
-
-  .result-total {
-    font-size: clamp(2.75rem, 6vw, 4.5rem);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    color: var(--brand-deep);
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
-    margin-bottom: var(--s-3);
-    transition: color 0.3s var(--ease-out-quart);
-  }
-
-  .result-label {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-tertiary);
-    margin-bottom: var(--s-2);
-  }
-
-  .result-metrics {
-    display: flex;
-    justify-content: center;
-    gap: var(--s-8);
-    margin-top: var(--s-6);
-  }
-
-  .result-metric {
-    text-align: center;
-  }
-
-  .result-metric .rm-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
-    line-height: 1.15;
-  }
-
-  .result-metric .rm-label {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-tertiary);
-    margin-top: var(--s-1);
-  }
-
-  .gain-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--s-2);
-    background: var(--brand);
-    color: var(--text-inverse);
-    padding: var(--s-2) var(--s-5);
-    border-radius: var(--radius-full);
-    font-size: 0.9375rem;
-    font-weight: 700;
-    margin-top: var(--s-4);
-  }
-
-  .gain-badge svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-  }
-
-  /* ================================================================
-     CHART SECTION
-     ================================================================ */
-  .chart-container {
-    position: relative;
-    height: 360px;
-    margin-top: var(--s-4);
-  }
-
-  .chart-insight {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    text-align: center;
-    margin-top: var(--s-4);
-    line-height: 1.6;
-  }
-
-  .chart-insight strong {
-    color: var(--brand-deep);
-    font-weight: 700;
-  }
-
-  /* ================================================================
-     TABLE
-     ================================================================ */
-  .table-wrap {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    margin: var(--s-2) calc(var(--s-8) * -1) calc(var(--s-4) * -1);
-    padding: 0 var(--s-8) var(--s-4);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 460px;
-    font-feature-settings: "tnum";
-    font-variant-numeric: tabular-nums;
-  }
-
-  thead th {
-    text-align: right;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-tertiary);
-    padding: var(--s-3) var(--s-4);
-    border-bottom: 2px solid var(--border);
-    white-space: nowrap;
-  }
-
-  thead th:first-child {
-    text-align: left;
-    padding-left: 0;
-  }
-
-  tbody td {
-    text-align: right;
-    padding: var(--s-3) var(--s-4);
-    border-bottom: 1px solid var(--surface-2);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: var(--text-secondary);
-    white-space: nowrap;
-    transition: background 0.15s var(--ease-out-quart);
-  }
-
-  tbody td:first-child {
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-primary);
-    padding-left: 0;
-  }
-
-  tbody tr:hover td {
-    background: var(--surface-1);
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
-    font-weight: 700;
-    color: var(--brand-deep);
-    font-size: 0.9375rem;
-    padding-top: var(--s-4);
-    padding-bottom: 0;
-  }
-
-  tbody tr:last-child td:first-child {
-    color: var(--brand-deep);
-  }
-
-  td.gain {
-    color: var(--success);
-    font-weight: 600;
-  }
-
-  /* ================================================================
-     COMPARISON CALLOUT
-     ================================================================ */
-  .comparison-bar {
-    display: flex;
-    align-items: center;
-    gap: var(--s-3);
-    padding: var(--s-4) var(--s-5);
-    background: var(--surface-2);
-    border-radius: var(--radius);
-    margin-top: var(--s-4);
-  }
-
-  .comparison-bar .cb-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--brand);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 700;
-  }
-
-  .comparison-bar .cb-text {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
-
-  .comparison-bar .cb-text strong {
-    color: var(--text-primary);
-    font-weight: 700;
-  }
-
-  /* ================================================================
-     FOOTER NOTE
-     ================================================================ */
-  .footer-note {
-    text-align: center;
-    padding-top: var(--s-10);
-  }
-
-  .footer-note p {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-    line-height: 1.6;
-  }
-
-  /* ================================================================
-     ANIMATIONS
-     ================================================================ */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(16px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-in {
-    animation: fadeInUp 0.5s var(--ease-out-expo) both;
-  }
-
-  .stagger-1 { animation-delay: 0.05s; }
-  .stagger-2 { animation-delay: 0.1s; }
-  .stagger-3 { animation-delay: 0.15s; }
-  .stagger-4 { animation-delay: 0.2s; }
-  .stagger-5 { animation-delay: 0.25s; }
-
-  /* ================================================================
-     RESPONSIVE
-     ================================================================ */
+  /* Responsive */
   @media (max-width: 768px) {
-    .stats-row {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .hero {
-      padding: var(--s-10) var(--s-2) var(--s-8);
-    }
-
-    .app-container {
-      padding: var(--s-4) var(--s-4) var(--s-10);
-    }
-
-    .result-metrics {
-      gap: var(--s-4);
-    }
-
-    .presets-grid {
-      grid-template-columns: 1fr;
-    }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .content-grid { grid-template-columns: 1fr; }
+    .hero { padding: var(--s-10) var(--s-2) var(--s-8); }
+    .app-container { padding: var(--s-4) var(--s-4) var(--s-10); }
+    .result-metrics { gap: var(--s-4); }
+    .presets-grid { grid-template-columns: 1fr; }
+    .target-timeline { gap: var(--s-2); }
+    .target-timeline-block { min-width: 60px; padding: var(--s-3); }
+    .target-timeline-block .tl-value { font-size: 1.5rem; }
   }
-
   @media (max-width: 480px) {
-    .stats-row {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--s-2);
-    }
-
-    .stat-card {
-      padding: var(--s-3) var(--s-3) var(--s-3);
-    }
-
-    .stat-value {
-      font-size: 1.125rem;
-    }
-
-    .freq-options {
-      flex-direction: column;
-    }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+    .stat-card { padding: var(--s-3); }
+    .stat-value { font-size: 1.125rem; }
+    .freq-options { flex-direction: column; }
+    .mode-tab { padding: var(--s-2) var(--s-4); font-size: 0.8125rem; }
   }
 
-  /* ================================================================
-     ACCESSIBILITY
-     ================================================================ */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 </style>
 </head>
 <body>
 
-<!-- Background decorations -->
 <div class="bg-pattern" aria-hidden="true"></div>
 <div class="bg-gradient" aria-hidden="true"></div>
 <div class="bg-gradient-2" aria-hidden="true"></div>
 
 <div class="app-container">
 
-  <!-- ======== HERO ======== -->
+  <!-- HERO -->
   <header class="hero animate-in stagger-1">
-    <div class="hero-badge">
-      <span class="dot" aria-hidden="true"></span>
-      复利的力量
-    </div>
-    <h1 class="hero-title">
-      让你的钱<span class="accent">持续增长</span>
-    </h1>
-    <p class="hero-subtitle">
-      输入三个关键参数，即刻了解复利效应如何让您的财富随时间加速积累
-    </p>
+    <div class="hero-badge"><span class="dot" aria-hidden="true"></span>复利的力量</div>
+    <h1 class="hero-title">让你的钱<span class="accent">持续增长</span></h1>
+    <p class="hero-subtitle">正向计算到期总额，或逆向求解到达目标需要多久</p>
   </header>
 
-  <!-- ======== STATS DASHBOARD ======== -->
-  <div class="stats-row" id="statsDashboard" aria-label="投资概况">
-    <div class="stat-card animate-in stagger-2" aria-label="最终总额">
-      <span class="stat-label">最终总额</span>
-      <span class="stat-value" id="statTotal">¥672,750</span>
-      <span class="stat-change">含全部收益</span>
-    </div>
-    <div class="stat-card animate-in stagger-3" aria-label="累计收益">
-      <span class="stat-label">累计收益</span>
-      <span class="stat-value" id="statGain">+¥572,750</span>
-      <span class="stat-change">绝对回报</span>
-    </div>
-    <div class="stat-card animate-in stagger-4" aria-label="增长倍数">
-      <span class="stat-label">增长倍数</span>
-      <span class="stat-value" id="statMultiple">6.73x</span>
-      <span class="stat-change">相对初始投入</span>
-    </div>
-    <div class="stat-card animate-in stagger-5" aria-label="年化收益率">
-      <span class="stat-label">年化收益率</span>
-      <span class="stat-value">10.00%</span>
-      <span class="stat-change" id="statAnnualized">按年复利</span>
+  <!-- MODE TABS -->
+  <div class="mode-tabs animate-in stagger-2" role="tablist" aria-label="计算模式">
+    <div class="mode-tab-wrap">
+      <button class="mode-tab active" id="tabForward" role="tab" aria-selected="true" data-mode="forward">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 3v12M5 8l4-5 4 5"/></svg>
+        正向：算到期总额
+      </button>
+      <button class="mode-tab" id="tabTarget" role="tab" aria-selected="false" data-mode="target">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="9" r="6"/><circle cx="9" cy="9" r="2"/><line x1="9" y1="3" x2="9" y2="5"/></svg>
+        逆向：算需要多久
+      </button>
     </div>
   </div>
 
-  <!-- ======== CONTENT GRID ======== -->
-  <div class="content-grid">
+  <!-- STATS DASHBOARD -->
+  <div class="stats-row" id="statsDashboard" aria-label="投资概况">
+    <div class="stat-card animate-in stagger-3" aria-label="最终总额">
+      <span class="stat-label" id="statLabel1">最终总额</span>
+      <span class="stat-value" id="statTotal">¥672,750</span>
+      <span class="stat-change" id="statChange1">含全部收益</span>
+    </div>
+    <div class="stat-card animate-in stagger-4" aria-label="累计收益">
+      <span class="stat-label" id="statLabel2">累计收益</span>
+      <span class="stat-value" id="statGain">+¥572,750</span>
+      <span class="stat-change" id="statChange2">绝对回报</span>
+    </div>
+    <div class="stat-card animate-in stagger-5" aria-label="增长倍数">
+      <span class="stat-label" id="statLabel3">增长倍数</span>
+      <span class="stat-value" id="statMultiple">6.73x</span>
+      <span class="stat-change" id="statChange3">相对初始投入</span>
+    </div>
+    <div class="stat-card" aria-label="年化收益率" style="animation: fadeInUp 0.5s var(--ease-out-expo) both; animation-delay: 0.3s;">
+      <span class="stat-label" id="statLabel4">年化收益率</span>
+      <span class="stat-value">10.00%</span>
+      <span class="stat-change" id="statChange4">按年复利</span>
+    </div>
+  </div>
 
+  <!-- CONTENT GRID -->
+  <div class="content-grid">
     <!-- LEFT: Inputs -->
     <div class="card" id="inputSection">
       <div class="section-header">
         <div class="section-icon input">1</div>
-        <div>
-          <div class="section-title">输入参数</div>
-          <div class="section-subtitle">调整数值查看复利效应</div>
+        <div><div class="section-title">输入参数</div><div class="section-subtitle" id="inputModeLabel">调整数值查看复利效应</div></div>
+      </div>
+
+      <!-- Forward mode inputs -->
+      <div id="forwardInputs">
+        <div class="input-group">
+          <label for="principal">初始本金 <span class="label-hint">您计划投入的金额</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="principal" value="100000" min="0" step="1" inputmode="numeric" aria-label="初始本金">
+            <span class="unit" aria-hidden="true">¥</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="rate">年化收益率 <span class="label-hint">预期每年的回报率</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="rate" value="10" min="0" max="100" step="0.1" inputmode="decimal" aria-label="年化收益率">
+            <span class="unit" aria-hidden="true">%</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="years">投资年限 <span class="label-hint">打算持有的年数</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="years" value="20" min="1" max="100" step="1" inputmode="numeric" aria-label="投资年限">
+            <span class="unit" aria-hidden="true">年</span>
+          </div>
         </div>
       </div>
 
-      <div class="input-group">
-        <label for="principal">
-          初始本金
-          <span class="label-hint">您计划投入的金额</span>
-        </label>
-        <div class="input-wrapper">
-          <input type="number" id="principal" value="100000" min="0" step="1" inputmode="numeric" aria-label="初始本金">
-          <span class="unit" aria-hidden="true">¥</span>
+      <!-- Target mode inputs -->
+      <div id="targetInputs" class="hidden">
+        <div class="input-group">
+          <label for="tPrincipal">初始本金 <span class="label-hint">您目前已投入的金额</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="tPrincipal" value="500000" min="0" step="1" inputmode="numeric" aria-label="初始本金">
+            <span class="unit" aria-hidden="true">¥</span>
+          </div>
         </div>
-      </div>
-
-      <div class="input-group">
-        <label for="rate">
-          年化收益率
-          <span class="label-hint">预期每年的回报率</span>
-        </label>
-        <div class="input-wrapper">
-          <input type="number" id="rate" value="10" min="0" max="100" step="0.1" inputmode="decimal" aria-label="年化收益率">
-          <span class="unit" aria-hidden="true">%</span>
+        <div class="input-group">
+          <label for="tRate">年化收益率 <span class="label-hint">预期每年的回报率</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="tRate" value="8" min="0" max="100" step="0.1" inputmode="decimal" aria-label="年化收益率">
+            <span class="unit" aria-hidden="true">%</span>
+          </div>
         </div>
-      </div>
-
-      <div class="input-group">
-        <label for="years">
-          投资年限
-          <span class="label-hint">打算持有的年数</span>
-        </label>
-        <div class="input-wrapper">
-          <input type="number" id="years" value="20" min="1" max="100" step="1" inputmode="numeric" aria-label="投资年限">
-          <span class="unit" aria-hidden="true">年</span>
+        <div class="input-group">
+          <label for="target">目标金额 <span class="label-hint">您期望达到的财富目标</span></label>
+          <div class="input-wrapper">
+            <input type="number" id="target" value="5000000" min="1" step="1" inputmode="numeric" aria-label="目标金额">
+            <span class="unit" aria-hidden="true">¥</span>
+          </div>
         </div>
       </div>
 
       <div class="freq-group">
         <div class="freq-label">收益再投资频率</div>
         <div class="freq-options" role="radiogroup" aria-label="复利频率">
-          <button class="freq-opt active" data-freq="1" role="radio" aria-checked="true">
-            每年
+          <button class="freq-opt active" data-freq="1" role="radio" aria-checked="true">每年</button>
+          <button class="freq-opt" data-freq="12" role="radio" aria-checked="false">每月</button>
+          <button class="freq-opt" data-freq="365" role="radio" aria-checked="false">每日</button>
+        </div>
+      </div>
+
+      <!-- Forward presets -->
+      <div id="forwardPresets">
+        <div class="presets-label">快速场景</div>
+        <div class="presets-grid">
+          <button class="preset-chip" data-p="100000" data-r="7" data-y="10">
+            <span class="pc-scenario">¥10万 · 7% · 10年</span><span class="pc-estimate">→ 约 ¥19.7万</span>
           </button>
-          <button class="freq-opt" data-freq="12" role="radio" aria-checked="false">
-            每月
+          <button class="preset-chip" data-p="100000" data-r="10" data-y="20">
+            <span class="pc-scenario">¥10万 · 10% · 20年</span><span class="pc-estimate">→ 约 ¥67.3万</span>
           </button>
-          <button class="freq-opt" data-freq="365" role="radio" aria-checked="false">
-            每日
+          <button class="preset-chip" data-p="500000" data-r="8" data-y="15">
+            <span class="pc-scenario">¥50万 · 8% · 15年</span><span class="pc-estimate">→ 约 ¥158.6万</span>
+          </button>
+          <button class="preset-chip" data-p="1000000" data-r="10" data-y="30">
+            <span class="pc-scenario">¥100万 · 10% · 30年</span><span class="pc-estimate">→ 约 ¥1,745万</span>
           </button>
         </div>
       </div>
 
-      <div class="presets-label">快速场景</div>
-      <div class="presets-grid">
-        <button class="preset-chip" data-p="100000" data-r="7" data-y="10">
-          <span class="pc-scenario">¥10万 · 7% · 10年</span>
-          <span class="pc-estimate">→ 约 ¥19.7万</span>
-        </button>
-        <button class="preset-chip" data-p="100000" data-r="10" data-y="20">
-          <span class="pc-scenario">¥10万 · 10% · 20年</span>
-          <span class="pc-estimate">→ 约 ¥67.3万</span>
-        </button>
-        <button class="preset-chip" data-p="500000" data-r="8" data-y="15">
-          <span class="pc-scenario">¥50万 · 8% · 15年</span>
-          <span class="pc-estimate">→ 约 ¥158.6万</span>
-        </button>
-        <button class="preset-chip" data-p="1000000" data-r="10" data-y="30">
-          <span class="pc-scenario">¥100万 · 10% · 30年</span>
-          <span class="pc-estimate">→ 约 ¥1,745万</span>
-        </button>
+      <!-- Target presets -->
+      <div id="targetPresets" class="hidden">
+        <div class="presets-label">常见目标</div>
+        <div class="presets-grid">
+          <button class="target-preset-chip" data-p="100000" data-r="10" data-t="1000000">
+            <span class="pc-scenario">¥10万 → ¥100万 · 10%</span><span class="pc-estimate">约 24.2 年</span>
+          </button>
+          <button class="target-preset-chip" data-p="500000" data-r="8" data-t="5000000">
+            <span class="pc-scenario">¥50万 → ¥500万 · 8%</span><span class="pc-estimate">约 30 年</span>
+          </button>
+          <button class="target-preset-chip" data-p="1000000" data-r="10" data-t="10000000">
+            <span class="pc-scenario">¥100万 → ¥1000万 · 10%</span><span class="pc-estimate">约 24.2 年</span>
+          </button>
+          <button class="target-preset-chip" data-p="200000" data-r="12" data-t="1000000">
+            <span class="pc-scenario">¥20万 → ¥100万 · 12%</span><span class="pc-estimate">约 14.3 年</span>
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- RIGHT: Results + Insights -->
+    <!-- RIGHT: Results -->
     <div>
-      <!-- Results -->
-      <div class="card card-highlight" id="results">
+      <!-- Forward result card -->
+      <div class="card card-highlight" id="forwardResult">
         <div class="section-header">
           <div class="section-icon result">2</div>
-          <div>
-            <div class="section-title">计算结果</div>
-            <div class="section-subtitle">到期后的财富面貌</div>
-          </div>
+          <div><div class="section-title">计算结果</div><div class="section-subtitle">到期后的财富面貌</div></div>
         </div>
-
         <div class="result-hero">
           <div class="result-label">到期后的总资产</div>
           <div class="result-total" id="totalVal">¥672,750</div>
           <div class="gain-badge" id="gainBadge">
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 3v10M4 7l4-4 4 4"/>
-            </svg>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M4 7l4-4 4 4"/></svg>
             累计收益 +¥572,750
+          </div>
+          <div class="result-metrics">
+            <div class="result-metric">
+              <div class="rm-value" id="multipleVal">6.73x</div><div class="rm-label">增长倍数</div>
+            </div>
+            <div class="result-metric">
+              <div class="rm-value" style="color:var(--success);" id="perYuanVal">¥6.73</div><div class="rm-label">每元初始投入 →</div>
+            </div>
+          </div>
+          <div class="comparison-bar">
+            <div class="cb-icon">!</div>
+            <div class="cb-text">您的初始投入 <strong id="cbPrincipal">¥100,000</strong> 在复利作用下，最终增长至 <strong id="cbFinal">¥672,750</strong>，相当于增值了 <strong id="cbMultiple">6.73</strong> 倍</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target result card -->
+      <div class="card card-highlight hidden" id="targetResult">
+        <div class="section-header">
+          <div class="section-icon result">2</div>
+          <div><div class="section-title">目标时间</div><div class="section-subtitle">达到目标金额所需时间</div></div>
+        </div>
+        <div class="result-hero">
+          <div class="result-label">达到目标金额所需时间</div>
+          <div class="result-total" id="targetTimeBig" style="font-size: clamp(1.8rem, 4.5vw, 3rem);">30 年</div>
+
+          <div class="target-timeline" id="targetTimeline">
+            <div class="target-timeline-block"><div class="tl-value" id="tlYears">30</div><div class="tl-unit">年</div></div>
+            <div class="target-timeline-sep">·</div>
+            <div class="target-timeline-block"><div class="tl-value" id="tlMonths">0</div><div class="tl-unit">月</div></div>
+            <div class="target-timeline-sep">·</div>
+            <div class="target-timeline-block"><div class="tl-value" id="tlDays">0</div><div class="tl-unit">天</div></div>
+          </div>
+
+          <div class="target-date-badge" id="targetDateBadge" style="display:none;">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="10" height="10" rx="2"/><line x1="2" y1="7" x2="12" y2="7"/><line x1="5" y1="1" x2="5" y2="5"/><line x1="9" y1="1" x2="9" y2="5"/></svg>
+            预计到达时间：<span id="arrivalDate">-</span>
+          </div>
+
+          <div class="gain-badge" id="tGainBadge">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M4 7l4-4 4 4"/></svg>
+            累计收益 <span id="tGain">+¥450万</span>
           </div>
 
           <div class="result-metrics">
             <div class="result-metric">
-              <div class="rm-value" id="multipleVal">6.73x</div>
-              <div class="rm-label">增长倍数</div>
+              <div class="rm-value" id="tMultipleVal">10.00x</div><div class="rm-label">增长倍数</div>
             </div>
             <div class="result-metric">
-              <div class="rm-value" style="color:var(--success);" id="perYuanVal">¥6.73</div>
-              <div class="rm-label">每元初始投入 →</div>
+              <div class="rm-value" style="color:var(--success);" id="tPerYuanVal">¥10.00</div><div class="rm-label">每元初始投入 →</div>
             </div>
           </div>
 
           <div class="comparison-bar">
             <div class="cb-icon">!</div>
-            <div class="cb-text">
-              您的初始投入 <strong id="cbPrincipal">¥100,000</strong> 在复利作用下，
-              最终增长至 <strong id="cbFinal">¥672,750</strong>，
-              相当于增值了 <strong id="cbMultiple">6.73</strong> 倍
-            </div>
+            <div class="cb-text">从 <strong id="tCbPrincipal">¥500,000</strong> 起步，以 <strong id="tCbRate">8%</strong> 年化收益，<strong id="tCbYears">30.0</strong> 年后达到目标 <strong id="tCbTarget">¥5,000,000</strong></div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- ======== CHART ======== -->
+  <!-- CHART -->
   <div class="card" id="chartSection" style="margin-bottom: var(--s-8);">
     <div class="section-header">
       <div class="section-icon chart">3</div>
-      <div>
-        <div class="section-title">增长曲线</div>
-        <div class="section-subtitle">可视化您的资产增长轨迹</div>
-      </div>
+      <div><div class="section-title">增长曲线</div><div class="section-subtitle" id="chartSubtitle">可视化您的资产增长轨迹</div></div>
     </div>
-
-    <div class="chart-container">
-      <canvas id="growthChart" role="img" aria-label="资产增长曲线图"></canvas>
-    </div>
-    <div class="chart-insight">
+    <div class="chart-container"><canvas id="growthChart" role="img" aria-label="资产增长曲线图"></canvas></div>
+    <div class="chart-insight" id="chartInsight">
       <strong>绿色曲线</strong> — 总资产增长轨迹 &nbsp;|&nbsp;
       <strong>浅色填充</strong> — 累计收益区域 &nbsp;|&nbsp;
       <strong>灰色虚线</strong> — 初始本金参照线
     </div>
   </div>
 
-  <!-- ======== TABLE ======== -->
+  <!-- TABLE -->
   <div class="card" id="tableSection">
     <div class="section-header">
       <div class="section-icon table">4</div>
-      <div>
-        <div class="section-title">逐年明细</div>
-        <div class="section-subtitle">每一年度的增长详情</div>
-      </div>
+      <div><div class="section-title" id="tableTitle">逐年明细</div><div class="section-subtitle" id="tableSubtitle">每一年度的增长详情</div></div>
     </div>
-
-    <div class="table-wrap" role="table" aria-label="逐年复利明细">
+    <div class="table-wrap" role="table" aria-label="复利明细">
       <table>
-        <thead>
-          <tr>
-            <th>年份</th>
-            <th>年初金额</th>
-            <th>当年收益</th>
-            <th>年末总额</th>
-            <th>累计倍数</th>
-          </tr>
-        </thead>
+        <thead><tr><th id="thCol1">年份</th><th>年初金额</th><th>当年收益</th><th>年末总额</th><th>累计倍数</th></tr></thead>
         <tbody id="tableBody"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- ======== FOOTER ======== -->
   <div class="footer-note">
     <p>复利计算基于恒定年化收益率假设，实际投资收益可能因市场波动而异。<br>本工具仅供模拟参考，不构成任何投资建议。</p>
   </div>
-
 </div>
 
 <script>
@@ -1118,49 +507,60 @@
   const principalEl = document.getElementById('principal');
   const rateEl = document.getElementById('rate');
   const yearsEl = document.getElementById('years');
-  const totalValEl = document.getElementById('totalVal');
-  const multipleValEl = document.getElementById('multipleVal');
-  const gainBadgeEl = document.getElementById('gainBadge');
-  const perYuanValEl = document.getElementById('perYuanVal');
+  const tPrincipalEl = document.getElementById('tPrincipal');
+  const tRateEl = document.getElementById('tRate');
+  const targetEl = document.getElementById('target');
   const tableBody = document.getElementById('tableBody');
   const freqOpts = document.querySelectorAll('.freq-opt');
 
   const statTotal = document.getElementById('statTotal');
   const statGain = document.getElementById('statGain');
   const statMultiple = document.getElementById('statMultiple');
-  const statAnnualized = document.getElementById('statAnnualized');
-  const cbPrincipal = document.getElementById('cbPrincipal');
-  const cbFinal = document.getElementById('cbFinal');
-  const cbMultiple = document.getElementById('cbMultiple');
+  const statLabel1 = document.getElementById('statLabel1');
+  const statLabel2 = document.getElementById('statLabel2');
+  const statLabel3 = document.getElementById('statLabel3');
+  const statLabel4 = document.getElementById('statLabel4');
+  const statChange1 = document.getElementById('statChange1');
+  const statChange2 = document.getElementById('statChange2');
+  const statChange3 = document.getElementById('statChange3');
+  const statChange4 = document.getElementById('statChange4');
 
   let compoundFreq = 1;
+  let currentMode = 'forward';
   let chart = null;
 
-  // ====== NUMBER ANIMATION HELPER ======
-  function animateValue(el, start, end, duration, formatter) {
-    const startTime = performance.now();
-    function step(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      const current = start + (end - start) * eased;
-      el.textContent = formatter ? formatter(current) : current;
-      if (progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+  // ====== MODE SWITCHING ======
+  document.getElementById('tabForward').addEventListener('click', () => switchMode('forward'));
+  document.getElementById('tabTarget').addEventListener('click', () => switchMode('target'));
+
+  function switchMode(mode) {
+    currentMode = mode;
+    document.getElementById('tabForward').classList.toggle('active', mode === 'forward');
+    document.getElementById('tabTarget').classList.toggle('active', mode === 'target');
+    document.getElementById('tabForward').setAttribute('aria-selected', mode === 'forward');
+    document.getElementById('tabTarget').setAttribute('aria-selected', mode === 'target');
+
+    document.getElementById('forwardInputs').classList.toggle('hidden', mode !== 'forward');
+    document.getElementById('targetInputs').classList.toggle('hidden', mode !== 'target');
+    document.getElementById('forwardPresets').classList.toggle('hidden', mode !== 'forward');
+    document.getElementById('targetPresets').classList.toggle('hidden', mode !== 'target');
+    document.getElementById('forwardResult').classList.toggle('hidden', mode !== 'forward');
+    document.getElementById('targetResult').classList.toggle('hidden', mode !== 'target');
+
+    document.getElementById('inputModeLabel').textContent = mode === 'forward' ? '调整数值查看复利效应' : '设定目标，看看多久能到达';
+    document.getElementById('chartSubtitle').textContent = mode === 'forward' ? '可视化您的资产增长轨迹' : '追踪达到目标的增长路径';
+
+    recalculate();
   }
 
   // ====== EVENTS ======
-  [principalEl, rateEl, yearsEl].forEach(el => {
+  [principalEl, rateEl, yearsEl, tPrincipalEl, tRateEl, targetEl].forEach(el => {
     el.addEventListener('input', recalculate);
   });
 
   freqOpts.forEach(opt => {
     opt.addEventListener('click', () => {
-      freqOpts.forEach(o => {
-        o.classList.remove('active');
-        o.setAttribute('aria-checked', 'false');
-      });
+      freqOpts.forEach(o => { o.classList.remove('active'); o.setAttribute('aria-checked', 'false'); });
       opt.classList.add('active');
       opt.setAttribute('aria-checked', 'true');
       compoundFreq = parseInt(opt.dataset.freq);
@@ -1168,13 +568,25 @@
     });
   });
 
-  document.querySelectorAll('.preset-chip').forEach(btn => {
+  // Forward presets
+  document.querySelectorAll('#forwardPresets .preset-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       principalEl.value = btn.dataset.p;
       rateEl.value = btn.dataset.r;
       yearsEl.value = btn.dataset.y;
       recalculate();
-      document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('forwardResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Target presets
+  document.querySelectorAll('#targetPresets .target-preset-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      tPrincipalEl.value = btn.dataset.p;
+      tRateEl.value = btn.dataset.r;
+      targetEl.value = btn.dataset.t;
+      recalculate();
+      document.getElementById('targetResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   });
 
@@ -1184,56 +596,68 @@
     if (n >= 1e4) return (n / 1e4).toFixed(2) + ' 万';
     return n.toLocaleString('zh-CN', { maximumFractionDigits: 0 });
   }
-
   function fmtShort(n) {
     if (n >= 1e8) return (n / 1e8).toFixed(2) + '亿';
     if (n >= 1e4) return (n / 1e4).toFixed(2) + '万';
     return n.toLocaleString('zh-CN', { maximumFractionDigits: 0 });
   }
-
   function fmtCompact(n) {
     if (n >= 1e8) return '¥' + (n / 1e8).toFixed(2) + '亿';
     if (n >= 1e4) return '¥' + (n / 1e4).toFixed(2) + '万';
     return '¥' + n.toLocaleString('zh-CN', { maximumFractionDigits: 0 });
   }
 
-  // ====== CORE CALCULATION ======
+  // ====== RECALCULATE — Router ======
   function recalculate() {
+    if (currentMode === 'forward') {
+      recalculateForward();
+    } else {
+      recalculateTarget();
+    }
+  }
+
+  // ====== FORWARD MODE ======
+  function recalculateForward() {
     const P = parseFloat(principalEl.value) || 0;
     const r = parseFloat(rateEl.value) || 0;
     const yrs = parseInt(yearsEl.value) || 1;
-
     const periodsPerYear = compoundFreq;
-    const totalPeriods = yrs * periodsPerYear;
     const rp = r / 100 / periodsPerYear;
-
+    const totalPeriods = yrs * periodsPerYear;
     const finalTotal = P * Math.pow(1 + rp, totalPeriods);
     const multiple = finalTotal / P;
     const gain = finalTotal - P;
 
-    // ===== UPDATE STATS DASHBOARD =====
+    // Stats dashboard
+    statLabel1.textContent = '最终总额'; statChange1.textContent = '含全部收益';
+    statLabel2.textContent = '累计收益'; statChange2.textContent = '绝对回报';
+    statLabel3.textContent = '增长倍数'; statChange3.textContent = '相对初始投入';
+    statLabel4.textContent = '年化收益率'; statChange4.textContent = compoundFreq === 1 ? '按年复利' : (compoundFreq === 12 ? '按月复利' : '按日复利');
     statTotal.textContent = fmtCompact(finalTotal);
     statGain.textContent = '+' + fmtCompact(gain);
     statMultiple.textContent = multiple.toFixed(2) + 'x';
-    statAnnualized.textContent = compoundFreq === 1 ? '按年复利' : (compoundFreq === 12 ? '按月复利' : '按日复利');
 
-    // ===== UPDATE RESULT CARD =====
-    totalValEl.textContent = fmtCompact(finalTotal);
-    multipleValEl.textContent = multiple.toFixed(2) + 'x';
-    perYuanValEl.textContent = '¥' + multiple.toFixed(2);
-    gainBadgeEl.innerHTML = `
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;">
-        <path d="M8 3v10M4 7l4-4 4 4"/>
-      </svg>
-      累计收益 +${fmtCompact(gain)}
-    `;
+    // Result card
+    document.getElementById('totalVal').textContent = fmtCompact(finalTotal);
+    document.getElementById('multipleVal').textContent = multiple.toFixed(2) + 'x';
+    document.getElementById('perYuanVal').textContent = '¥' + multiple.toFixed(2);
+    document.getElementById('gainBadge').innerHTML = `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;"><path d="M8 3v10M4 7l4-4 4 4"/></svg>累计收益 +${fmtCompact(gain)}`;
+    document.getElementById('cbPrincipal').textContent = fmtCompact(P);
+    document.getElementById('cbFinal').textContent = fmtCompact(finalTotal);
+    document.getElementById('cbMultiple').textContent = multiple.toFixed(2);
 
-    // ===== UPDATE COMPARISON BAR =====
-    cbPrincipal.textContent = fmtCompact(P);
-    cbFinal.textContent = fmtCompact(finalTotal);
-    cbMultiple.textContent = multiple.toFixed(2);
+    // Table
+    document.getElementById('tableTitle').textContent = '逐年明细';
+    document.getElementById('tableSubtitle').textContent = '每一年度的增长详情';
+    document.getElementById('thCol1').textContent = '年份';
+    buildForwardTable(P, r, yrs, periodsPerYear, rp, finalTotal);
 
-    // ===== UPDATE TABLE =====
+    // Chart
+    document.getElementById('chartInsight').innerHTML = `<strong>绿色曲线</strong> — 总资产增长轨迹 &nbsp;|&nbsp; <strong>浅色填充</strong> — 累计收益区域 &nbsp;|&nbsp; <strong>灰色虚线</strong> — 初始本金参照线`;
+    updateForwardChart(P, r, yrs, periodsPerYear);
+  }
+
+  function buildForwardTable(P, r, yrs, periodsPerYear, rp, finalTotal) {
     tableBody.innerHTML = '';
     const maxRows = 20;
     const step = Math.max(1, Math.ceil(yrs / maxRows));
@@ -1242,53 +666,192 @@
       const endingVal = P * Math.pow(1 + rp, periods);
       const beginVal = y === step ? P : P * Math.pow(1 + rp, (y - step) * periodsPerYear);
       const yearGain = endingVal - beginVal;
-      tableBody.innerHTML += `
-        <tr>
-          <td>第 ${y} 年</td>
-          <td>${fmtCurrency(beginVal)}</td>
-          <td class="gain">+${fmtShort(yearGain)}</td>
-          <td>${fmtCurrency(endingVal)}</td>
-          <td>${(endingVal / P).toFixed(2)}x</td>
-        </tr>`;
+      tableBody.innerHTML += `<tr><td>第 ${y} 年</td><td>${fmtCurrency(beginVal)}</td><td class="gain">+${fmtShort(yearGain)}</td><td>${fmtCurrency(endingVal)}</td><td>${(endingVal / P).toFixed(2)}x</td></tr>`;
     }
     if (yrs % step !== 0) {
       const beginValLast = P * Math.pow(1 + rp, (yrs - (yrs % step)) * periodsPerYear);
       const yearGain = finalTotal - beginValLast;
-      tableBody.innerHTML += `
-        <tr>
-          <td>第 ${yrs} 年</td>
-          <td>${fmtCurrency(beginValLast)}</td>
-          <td class="gain">+${fmtShort(yearGain)}</td>
-          <td>${fmtCurrency(finalTotal)}</td>
-          <td>${(finalTotal / P).toFixed(2)}x</td>
-        </tr>`;
+      tableBody.innerHTML += `<tr><td>第 ${yrs} 年</td><td>${fmtCurrency(beginValLast)}</td><td class="gain">+${fmtShort(yearGain)}</td><td>${fmtCurrency(finalTotal)}</td><td>${(finalTotal / P).toFixed(2)}x</td></tr>`;
     }
-
-    // ===== UPDATE CHART =====
-    updateChart(P, r, yrs, periodsPerYear);
   }
 
-  // ====== CHART ======
-  function updateChart(P, r, yrs, freq) {
-    const labels = [];
-    const dataTotal = [];
-    const dataPrincipal = [];
-
-    const maxPoints = 60;
-    const step = Math.max(1, Math.ceil(yrs / maxPoints));
+  function updateForwardChart(P, r, yrs, freq) {
+    const labels = [], dataTotal = [], dataPrincipal = [];
+    const maxPoints = 60, step = Math.max(1, Math.ceil(yrs / maxPoints));
     for (let y = 0; y <= yrs; y += step) {
       labels.push(y === 0 ? '起初' : '第' + y + '年');
-      const periods = y * freq;
       const rp = r / 100 / freq;
-      const val = P * Math.pow(1 + rp, periods);
+      const val = P * Math.pow(1 + rp, y * freq);
       dataTotal.push(Number(val.toFixed(2)));
       dataPrincipal.push(Number(P.toFixed(2)));
     }
     if (yrs % step !== 0) {
       labels.push('第' + yrs + '年');
-      const rp = r / 100 / freq;
-      const val = P * Math.pow(1 + rp, yrs * freq);
+      const val = P * Math.pow(1 + (r / 100 / freq), yrs * freq);
       dataTotal.push(Number(val.toFixed(2)));
+      dataPrincipal.push(Number(P.toFixed(2)));
+    }
+
+    const ctx = document.getElementById('growthChart').getContext('2d');
+    if (chart) chart.destroy();
+    const gradient = ctx.createLinearGradient(0, 0, 0, 360);
+    gradient.addColorStop(0, 'rgba(164, 208, 55, 0.28)');
+    gradient.addColorStop(0.5, 'rgba(164, 208, 55, 0.08)');
+    gradient.addColorStop(1, 'rgba(164, 208, 55, 0.01)');
+
+    chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          { label: '总资产', data: dataTotal, borderColor: '#A4D037', backgroundColor: gradient, borderWidth: 3.5, fill: true, tension: 0.35, pointRadius: 0, pointHoverRadius: 9, pointHoverBackgroundColor: '#A4D037', pointHoverBorderColor: '#FFFFFF', pointHoverBorderWidth: 3 },
+          { label: '初始本金', data: dataPrincipal, borderColor: '#CBD5E1', borderWidth: 2, borderDash: [8, 6], fill: false, tension: 0.35, pointRadius: 0, pointHoverRadius: 9, pointHoverBackgroundColor: '#CBD5E1', pointHoverBorderColor: '#FFFFFF', pointHoverBorderWidth: 3 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'bottom', align: 'center', labels: { color: '#475569', font: { size: 13, weight: '600', family: '"Outfit","PingFang SC",sans-serif' }, usePointStyle: true, pointStyleWidth: 10, padding: 24 } },
+          tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#E2E8F0', titleFont: { size: 15, weight: '700' }, bodyFont: { size: 14 }, cornerRadius: 10, padding: 14, displayColors: true, boxPadding: 6, callbacks: { label: (ctx) => '  ' + ctx.dataset.label + '：' + fmtCurrency(ctx.raw) } }
+        },
+        scales: {
+          x: { grid: { color: 'rgba(226, 232, 240, 0.5)' }, ticks: { color: '#94A3B8', font: { size: 12, weight: '500' }, maxTicksLimit: 10 } },
+          y: { grid: { color: 'rgba(226, 232, 240, 0.5)' }, ticks: { color: '#94A3B8', font: { size: 12, weight: '500' }, callback: (v) => fmtCompact(v), maxTicksLimit: 6 } }
+        },
+        interaction: { intersect: false, mode: 'index' }
+      }
+    });
+  }
+
+  // ====== TARGET MODE ======
+  function recalculateTarget() {
+    const P = parseFloat(tPrincipalEl.value) || 0;
+    const r = parseFloat(tRateEl.value) || 0;
+    const T = parseFloat(targetEl.value) || 0;
+
+    if (P <= 0 || r <= 0 || T <= 0 || T <= P) {
+      // Invalid input — show default
+      document.getElementById('targetTimeBig').textContent = '输入有效参数';
+      document.getElementById('tlYears').textContent = '-';
+      document.getElementById('tlMonths').textContent = '-';
+      document.getElementById('tlDays').textContent = '-';
+      return;
+    }
+
+    // t = ln(T/P) / ln(1 + r/n) / n
+    const n = compoundFreq;
+    const rn = r / 100 / n;
+    const totalPeriods = Math.log(T / P) / Math.log(1 + rn);
+    const totalYears = totalPeriods / n;
+
+    const yrs = Math.floor(totalYears);
+    const remainingDays = (totalYears - yrs) * 365.25;
+    const months = Math.floor(remainingDays / 30.44);
+    const days = Math.floor(remainingDays % 30.44);
+
+    // Exact final amount at the computed time
+    const exactFinal = P * Math.pow(1 + rn, totalPeriods);
+    const gain = exactFinal - P;
+    const multiple = exactFinal / P;
+
+    // Arrival date
+    const now = new Date();
+    const arrivalDate = new Date(now.getTime() + totalYears * 365.25 * 24 * 60 * 60 * 1000);
+
+    // Stats dashboard
+    statLabel1.textContent = '所需时间'; statChange1.textContent = '达到目标';
+    statLabel2.textContent = '累计收益'; statChange2.textContent = '绝对回报';
+    statLabel3.textContent = '增长倍数'; statChange3.textContent = '相对初始投入';
+    statLabel4.textContent = '年化收益率'; statChange4.textContent = compoundFreq === 1 ? '按年复利' : (compoundFreq === 12 ? '按月复利' : '按日复利');
+    statTotal.textContent = totalYears >= 100 ? '>100年' : (totalYears.toFixed(1) + ' 年');
+    statGain.textContent = '+' + fmtCompact(gain);
+    statMultiple.textContent = multiple.toFixed(2) + 'x';
+
+    // Result card
+    if (totalYears >= 100) {
+      document.getElementById('targetTimeBig').textContent = '超过 100 年';
+    } else {
+      document.getElementById('targetTimeBig').textContent = fmtTimeSummary(yrs, months);
+    }
+    document.getElementById('tlYears').textContent = totalYears >= 100 ? '>100' : yrs;
+    document.getElementById('tlMonths').textContent = totalYears >= 100 ? '-' : months;
+    document.getElementById('tlDays').textContent = totalYears >= 100 ? '-' : days;
+
+    const dateBadge = document.getElementById('targetDateBadge');
+    const arrivalDateEl = document.getElementById('arrivalDate');
+    if (totalYears < 100) {
+      dateBadge.style.display = 'inline-flex';
+      arrivalDateEl.textContent = arrivalDate.getFullYear() + '年' + (arrivalDate.getMonth() + 1) + '月';
+    } else {
+      dateBadge.style.display = 'none';
+    }
+
+    document.getElementById('tGain').textContent = '+' + fmtCompact(gain);
+    document.getElementById('tMultipleVal').textContent = multiple.toFixed(2) + 'x';
+    document.getElementById('tPerYuanVal').textContent = '¥' + multiple.toFixed(2);
+    document.getElementById('tCbPrincipal').textContent = fmtCompact(P);
+    document.getElementById('tCbTarget').textContent = fmtCompact(T);
+    document.getElementById('tCbRate').textContent = r + '%';
+    document.getElementById('tCbYears').textContent = totalYears.toFixed(1);
+
+    // Table
+    document.getElementById('tableTitle').textContent = '达成路径';
+    document.getElementById('tableSubtitle').textContent = '逐步追踪达到目标的过程';
+    document.getElementById('thCol1').textContent = '阶段';
+    buildTargetTable(P, r, totalYears, n, rn, T, exactFinal);
+
+    // Chart
+    document.getElementById('chartInsight').innerHTML = `<strong>绿色曲线</strong> — 资产增长轨迹 &nbsp;|&nbsp; <strong style="color:var(--warning)">橙色虚线</strong> — 目标金额 &nbsp;|&nbsp; <strong>灰色虚线</strong> — 初始本金`;
+    updateTargetChart(P, r, totalYears, n, T);
+  }
+
+  function fmtTimeSummary(yrs, months) {
+    if (yrs === 0 && months === 0) return '< 1 个月';
+    const parts = [];
+    if (yrs > 0) parts.push(yrs + ' 年');
+    if (months > 0) parts.push(months + ' 个月');
+    return parts.join(' ');
+  }
+
+  function buildTargetTable(P, r, totalYears, n, rn, target, exactFinal) {
+    tableBody.innerHTML = '';
+    const maxRows = 25;
+    const interval = Math.max(1, Math.ceil(totalYears / maxRows));
+    const fractionalYr = Math.ceil(totalYears);
+
+    for (let y = interval; y < fractionalYr; y += interval) {
+      const val = P * Math.pow(1 + rn, y * n);
+      const prevVal = P * Math.pow(1 + rn, (y - interval) * n);
+      const gain = val - prevVal;
+      const rowClass = val >= target ? ' target-row' : '';
+      tableBody.innerHTML += `<tr class="${rowClass}"><td>第 ${y} 年</td><td>${fmtCurrency(prevVal)}</td><td class="gain">+${fmtShort(gain)}</td><td>${fmtCurrency(val)}</td><td>${(val / P).toFixed(2)}x</td></tr>`;
+    }
+
+    // Final row — the exact target crossing point
+    const beforeLast = P * Math.pow(1 + rn, (fractionalYr - interval) * n);
+    const finalRowGain = exactFinal - beforeLast;
+    tableBody.innerHTML += `<tr class="target-row"><td>第 ${totalYears.toFixed(1)} 年</td><td>${fmtCurrency(beforeLast)}</td><td class="gain">+${fmtShort(finalRowGain)}</td><td>${fmtCurrency(exactFinal)}</td><td>${(exactFinal / P).toFixed(2)}x</td></tr>`;
+  }
+
+  function updateTargetChart(P, r, totalYears, n, target) {
+    const labels = [], dataTotal = [], dataTarget = [], dataPrincipal = [];
+    const maxPoints = 70;
+    const ceilYrs = Math.ceil(totalYears) + 2;
+    const step = Math.max(0.1, ceilYrs / maxPoints);
+
+    for (let y = 0; y <= ceilYrs; y += step) {
+      labels.push(y <= 0.1 ? '起初' : '第' + y.toFixed(y < 1 ? 1 : 0) + '年');
+      const val = P * Math.pow(1 + (r / 100 / n), y * n);
+      dataTotal.push(Number(val.toFixed(2)));
+      dataTarget.push(Number(target.toFixed(2)));
+      dataPrincipal.push(Number(P.toFixed(2)));
+    }
+    // Ensure final point
+    if (labels[labels.length - 1] !== '第' + ceilYrs.toFixed(0) + '年') {
+      const lastVal = P * Math.pow(1 + (r / 100 / n), ceilYrs * n);
+      labels.push('第' + ceilYrs.toFixed(0) + '年');
+      dataTotal.push(Number(lastVal.toFixed(2)));
+      dataTarget.push(Number(target.toFixed(2)));
       dataPrincipal.push(Number(P.toFixed(2)));
     }
 
@@ -1305,89 +868,22 @@
       data: {
         labels,
         datasets: [
-          {
-            label: '总资产',
-            data: dataTotal,
-            borderColor: '#A4D037',
-            backgroundColor: gradient,
-            borderWidth: 3.5,
-            fill: true,
-            tension: 0.35,
-            pointRadius: 0,
-            pointHoverRadius: 9,
-            pointHoverBackgroundColor: '#A4D037',
-            pointHoverBorderColor: '#FFFFFF',
-            pointHoverBorderWidth: 3,
-          },
-          {
-            label: '初始本金',
-            data: dataPrincipal,
-            borderColor: '#CBD5E1',
-            borderWidth: 2,
-            borderDash: [8, 6],
-            fill: false,
-            tension: 0.35,
-            pointRadius: 0,
-            pointHoverRadius: 9,
-            pointHoverBackgroundColor: '#CBD5E1',
-            pointHoverBorderColor: '#FFFFFF',
-            pointHoverBorderWidth: 3,
-          }
+          { label: '总资产', data: dataTotal, borderColor: '#A4D037', backgroundColor: gradient, borderWidth: 3.5, fill: true, tension: 0.35, pointRadius: 0, pointHoverRadius: 9, pointHoverBackgroundColor: '#A4D037', pointHoverBorderColor: '#FFFFFF', pointHoverBorderWidth: 3 },
+          { label: '目标金额', data: dataTarget, borderColor: '#F59E0B', borderWidth: 2.5, borderDash: [6, 4], fill: false, tension: 0, pointRadius: 0, pointHoverRadius: 0 },
+          { label: '初始本金', data: dataPrincipal, borderColor: '#CBD5E1', borderWidth: 2, borderDash: [8, 6], fill: false, tension: 0.35, pointRadius: 0, pointHoverRadius: 9, pointHoverBackgroundColor: '#CBD5E1', pointHoverBorderColor: '#FFFFFF', pointHoverBorderWidth: 3 }
         ]
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: {
-          legend: {
-            position: 'bottom',
-            align: 'center',
-            labels: {
-              color: '#475569',
-              font: { size: 13, weight: '600', family: '"Outfit","PingFang SC",sans-serif' },
-              usePointStyle: true,
-              pointStyleWidth: 10,
-              padding: 24,
-            }
-          },
-          tooltip: {
-            backgroundColor: '#0F172A',
-            titleColor: '#FFFFFF',
-            bodyColor: '#E2E8F0',
-            titleFont: { size: 15, weight: '700' },
-            bodyFont: { size: 14 },
-            cornerRadius: 10,
-            padding: 14,
-            displayColors: true,
-            boxPadding: 6,
-            callbacks: {
-              label: (ctx) => '  ' + ctx.dataset.label + '：' + fmtCurrency(ctx.raw)
-            }
-          }
+          legend: { position: 'bottom', align: 'center', labels: { color: '#475569', font: { size: 13, weight: '600', family: '"Outfit","PingFang SC",sans-serif' }, usePointStyle: true, pointStyleWidth: 10, padding: 24 } },
+          tooltip: { backgroundColor: '#0F172A', titleColor: '#FFFFFF', bodyColor: '#E2E8F0', titleFont: { size: 15, weight: '700' }, bodyFont: { size: 14 }, cornerRadius: 10, padding: 14, displayColors: true, boxPadding: 6, callbacks: { label: (ctx) => '  ' + ctx.dataset.label + '：' + fmtCurrency(ctx.raw) } }
         },
         scales: {
-          x: {
-            grid: { color: 'rgba(226, 232, 240, 0.5)' },
-            ticks: {
-              color: '#94A3B8',
-              font: { size: 12, weight: '500' },
-              maxTicksLimit: 10,
-            }
-          },
-          y: {
-            grid: { color: 'rgba(226, 232, 240, 0.5)' },
-            ticks: {
-              color: '#94A3B8',
-              font: { size: 12, weight: '500' },
-              callback: (v) => fmtCompact(v),
-              maxTicksLimit: 6,
-            }
-          }
+          x: { grid: { color: 'rgba(226, 232, 240, 0.5)' }, ticks: { color: '#94A3B8', font: { size: 12, weight: '500' }, maxTicksLimit: 10 } },
+          y: { grid: { color: 'rgba(226, 232, 240, 0.5)' }, ticks: { color: '#94A3B8', font: { size: 12, weight: '500' }, callback: (v) => fmtCompact(v), maxTicksLimit: 6 } }
         },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        }
+        interaction: { intersect: false, mode: 'index' }
       }
     });
   }
